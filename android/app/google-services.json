@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "945275619654",
+    "project_id": "dialer-ip",
+    "storage_bucket": "dialer-ip.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945275619654:android:96d662ba18f2546b2abd47",
+        "android_client_info": {
+          "package_name": "com.example.my_firebase_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLPMxP7FdOiFn6LtniiNm17DAd9dd3X-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
