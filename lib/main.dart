@@ -434,7 +434,7 @@ class DispositionCache {
 }
 
 class _LeadCallerScreenState extends State<LeadCallerScreen> {
-  final String apiUrl = 'https://script.google.com/macros/s/1JlbpZlEn-NqnWUQq6yyYamg8Nzl8j5AK6gTnRkaI4hCAcnML0fjIIhYj/exec';
+  final String apiUrl = 'https://script.google.com/macros/s/AKfycbw-nNqsPVzFYIFQUj0g9PyIqy3PIDySon-akYGe9thmHSY1BLgLoQ6wtwpX7qQgCmfO/exec';
   Map<String, dynamic>? currentLead;
   String? selectedDisposition;
   TextEditingController commentController = TextEditingController();
@@ -1325,7 +1325,7 @@ class _LoginScreenState extends State<LoginScreen> {
 		  return;
 		}
 
-		final validationUrl = 'https://script.google.com/macros/s/1JlbpZlEn-NqnWUQq6yyYamg8Nzl8j5AK6gTnRkaI4hCAcnML0fjIIhYj/exec?authcheck=\$callerPhone';
+		final validationUrl = 'https://script.google.com/macros/s/AKfycbw-nNqsPVzFYIFQUj0g9PyIqy3PIDySon-akYGe9thmHSY1BLgLoQ6wtwpX7qQgCmfO/exec?authcheck=$callerPhone';
 		final response = await http.get(Uri.parse(validationUrl));
 		final data = json.decode(response.body);
 
