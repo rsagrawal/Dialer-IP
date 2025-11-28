@@ -95,7 +95,21 @@ function doGet(e) {
   }
 
   // Main lead fetching logic (same as production)
-  const data = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME).getDataRange().getValues();
+  // ✅ 1️⃣ Get state from request parameter, fallback if blank or National
+  var state = e.parameter.state;
+  var sheetName = (state && state !== '' && state !== 'National') ? state : SHEET_NAME;
+
+  // ✅ 2️⃣ Use this sheet name
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+
+  // ✅ If the sheet does not exist, stop here and tell caller
+  if (!sheet) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: 'error', message: 'Sheet not found', noLeads: true })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  const data = sheet.getDataRange().getValues();
   const headers = data[0];
   const nameCol = headers.indexOf("Name");
   const phoneCol = headers.indexOf("Phone Number");

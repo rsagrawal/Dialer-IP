@@ -1325,53 +1325,64 @@ class _LoginScreenState extends State<LoginScreen> {
 		  return;
 		}
 
-		final validationUrl = 'https://script.google.com/macros/s/AKfycbw-nNqsPVzFYIFQUj0g9PyIqy3PIDySon-akYGe9thmHSY1BLgLoQ6wtwpX7qQgCmfO/exec?authcheck=$callerPhone';
-		final response = await http.get(Uri.parse(validationUrl));
-		final data = json.decode(response.body);
+    final validationUrl = 'https://script.google.com/macros/s/AKfycbw-nNqsPVzFYIFQUj0g9PyIqy3PIDySon-akYGe9thmHSY1BLgLoQ6wtwpX7qQgCmfO/exec?authcheck=$callerPhone';
+    
+    try {
+      final response = await http.get(Uri.parse(validationUrl));
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
 
-		if (data['authorized'] == true) {
-		  setState(() {
-			icallerName = data['callerName'];
-			icallerState = data['callerState'];
-			icallerPhone = callerPhone;  // Save the phone number globally too!
-		  });
+        if (data['authorized'] == true) {
+          setState(() {
+            icallerName = data['callerName'];
+            icallerState = data['callerState'];
+            icallerPhone = callerPhone;
+          });
 
-		  Navigator.pushReplacement(
-			context,
-			MaterialPageRoute(
-			  builder: (_) => InstructionScreen(
-				callerName: icallerName,
-				callerPhone: icallerPhone,
-				callerState: icallerState,
-			  ),
-			),
-		  );
-
-		} else {    
-		  setState(() { isLoading = false; });
-
-		  if (mounted) {
-			showDialog(
-			  context: context,
-			  builder: (context) => AlertDialog(
-				title: Text('Unauthorized'),
-				content: Text('Unauthorized Number. Contact Admin'),
-				actions: [
-				  TextButton(
-					onPressed: () {
-					  Navigator.of(context).pop(); 
-					  Navigator.of(context).pushAndRemoveUntil(
-						MaterialPageRoute(builder: (_) => LoginScreen()), 
-						(route) => false,
-					  );
-					},
-					child: Text('OK'),
-				  ),
-				],
-			  ),
-			);
-		  }
-		}
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => InstructionScreen(
+                callerName: icallerName,
+                callerPhone: icallerPhone,
+                callerState: icallerState,
+              ),
+            ),
+          );
+        } else {
+          setState(() { isLoading = false; });
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Unauthorized'),
+                content: Text('Unauthorized Number. Contact Admin'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => LoginScreen()),
+                        (route) => false,
+                      );
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+      } else {
+        throw Exception('Server returned status: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() { isLoading = false; });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Failed: ${e.toString()}")),
+      );
+    }
   }
   
 	void startResendCountdown() {
