@@ -519,52 +519,51 @@ class _LeadCallerScreenState extends State<LeadCallerScreen> {
     });
 
     // final response = await http.get(Uri.parse(apiUrl));
-	final response = await http.get(Uri.parse('$apiUrl?state=${widget.callerState}'));
+    try {
+      final response = await http.get(Uri.parse('$apiUrl?state=${widget.callerState}'));
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-	  
-		if (data['noLeads'] == true) {
-		  // ✅ If sheet not found OR no leads, show message
-		setState(() {
-		  currentLead = null;               // ✅ No lead
-		  selectedDisposition = null;       // ✅ Clear disposition
-		  commentController.clear();        // ✅ Clear comment box
-		  isLoading = false;                // ✅ Spinner off
-		  showFetchMessage = false;         // ✅ Flag cleared
-		});
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        
+        if (data['noLeads'] == true) {
+          setState(() {
+            currentLead = null;
+            selectedDisposition = null;
+            commentController.clear();
+            isLoading = false;
+            showFetchMessage = false;
+          });
 
-		  ScaffoldMessenger.of(context).showSnackBar(
-			SnackBar(content: Text('No Leads Available')),
-		  );
-
-		  return; // ✅ Stop here — no more processing
-		}	  
-	  
-      if (data['message'] == null && data['name'] != "") {
-        setState(() {
-          currentLead = data;
-          selectedDisposition = null;
-          commentController.clear();
-          isLoading = false;
-	      showFetchMessage = false; // Reset after fetch is done
-
-        });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('No Leads Available')),
+          );
+          return;
+        }
+        
+        if (data['message'] == null && data['name'] != "") {
+          setState(() {
+            currentLead = data;
+            selectedDisposition = null;
+            commentController.clear();
+            isLoading = false;
+            showFetchMessage = false;
+          });
+        } else {
+          setState(() {
+            currentLead = null;
+            persistentMessage = data['message'] ?? 'No more leads';
+            isLoading = false;
+            showFetchMessage = false;
+          });
+        }
       } else {
-        setState(() {
-          currentLead = null;
-          persistentMessage = data['message'] ?? 'No more leads';
-          isLoading = false;
-	      showFetchMessage = false; // Reset after fetch is done
-
-        });
+        throw Exception('Server returned status: ${response.statusCode}');
       }
-    } else {
+    } catch (e) {
       setState(() {
-        persistentMessage = "Failed to fetch lead.";
+        persistentMessage = "Failed to fetch lead: ${e.toString()}";
         isLoading = false;
-	    showFetchMessage = false; // Reset after fetch is done
-
+        showFetchMessage = false;
       });
     }
   }
