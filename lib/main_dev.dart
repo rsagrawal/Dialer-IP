@@ -953,7 +953,7 @@ class _LeadCallerScreenState extends State<LeadCallerScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              currentLead!['name'] ?? "Unknown",
+                              currentLead!['name']?.toString() ?? "Unknown",
                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             Text(
@@ -974,7 +974,7 @@ class _LeadCallerScreenState extends State<LeadCallerScreen> {
                         children: [
                           Text("Phone Number", style: TextStyle(color: Colors.grey, fontSize: 12)),
                           Text(
-                            currentLead!['phone'] ?? "",
+                            currentLead!['phone']?.toString() ?? "",
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: 0.5),
                           ),
                         ],
