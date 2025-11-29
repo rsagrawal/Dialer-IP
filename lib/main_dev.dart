@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+import 'secrets.dart';
 
   
   String icallerName = '';
@@ -1278,11 +1279,11 @@ class _LoginScreenState extends State<LoginScreen> {
 	
     final uri = Uri.parse('https://api.smscountry.com/SMSCwebservice_bulk.aspx');
     final params = {
-      'User': "VVKICRM",
-      'passwd': "pass@1981A234",
+      'User': Secrets.smsCountryUser,
+      'passwd': Secrets.smsCountryPass,
       'mobilenumber': '91$phone',
       'message': 'OTP for mobile verification is: $generatedOtp. Thank you. JGD.',
-      'sid': "VVKICRM",
+      'sid': Secrets.smsCountrySid,
       'mtype': 'N',
       'DR': 'Y'
     };
