@@ -17,7 +17,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
-import 'secrets.dart';
 
   
   String icallerName = '';
@@ -1225,6 +1224,21 @@ class _LoginScreenState extends State<LoginScreen> {
 	
 	if (phoneController.text.trim().length != 10) {
 	  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Enter valid 10-digit mobile number.")));
+	  return;
+	}
+	
+    final uri = Uri.parse('https://api.smscountry.com/SMSCwebservice_bulk.aspx');
+    final params = {
+      'User': "VVKICRM",
+      'passwd': "pass@1981A234",
+      'mobilenumber': '91$phone',
+      'message': 'OTP for mobile verification is: $generatedOtp. Thank you. JGD.',
+	  //'message': 'You\'ve been referred to the Art of Living Rojgar Portal. Register at aolt.in/rojgar to explore job opportunities.',
+      'sid': "VVKICRM",
+      'mtype': 'N',
+      'DR': 'Y'
+    };
+	
     try {
       final response = await http.post(uri, body: params);
       if (response.statusCode == 200) {
